@@ -1,34 +1,39 @@
-/* How to Hook with Logos
-Hooks are written with syntax similar to that of an Objective-C @implementation.
-You don't need to #include <substrate.h>, it will be done automatically, as will
-the generation of a class list and an automatic constructor.
+#import <SpringBoard/SBAwayView.h>
+#import <UIKit/UIKit.h>
+#import <substrate.h>
 
-%hook ClassName
+#define IMG_WIDTH   150.f
+#define IMG_HEIGHT  186.f
 
-// Hooking a class method
-+ (id)sharedInstance {
-	return %orig;
+%hook SBAwayView
+
+-(id)initWithFrame:(CGRect)frame
+{
+	id result = %orig;
+	if (result)
+	{
+		/*
+		CGRect labelRect = [self middleFrame];
+		labelRect.origin.y = labelRect.origin.y + 20.f;
+		labelRect.size.height = 50.f;
+		UILabel *habrLabel = [[[UILabel alloc] initWithFrame:labelRect] autorelease];
+		habrLabel.text = @"Hello, Habr!";
+		habrLabel.textColor = [UIColor colorWithRed:155.f/255.f green:182.f/255.f blue:206.f/255.f alpha:1.f];
+		habrLabel.opaque = NO; 
+		habrLabel.textAlignment = UITextAlignmentCenter;
+		habrLabel.font = [UIFont boldSystemFontOfSize:36];
+		habrLabel.backgroundColor = [UIColor clearColor];*/
+		CGRect imageRect = [self middleFrame];
+		imageRect.origin.y = imageRect.origin.y + 20.f;
+		imageRect.origin.x = (imageRect.size.width - IMG_WIDTH) / 2.f;
+		imageRect.size.width = IMG_WIDTH;
+		imageRect.size.height = IMG_HEIGHT;
+		UIImageView *habrLogoView = [[[UIImageView alloc] initWithFrame:imageRect] autorelease];
+		habrLogoView.image = [UIImage imageNamed:@"habr_logo_hat"];
+		UIImageView *backgroundView = MSHookIvar<UIImageView *>(self, "_backgroundView");
+		[backgroundView addSubview:habrLogoView];
+	}
+	return result;
 }
 
-// Hooking an instance method with an argument.
-- (void)messageName:(int)argument {
-	%log; // Write a message about this call, including its class, name and arguments, to the system log.
-
-	%orig; // Call through to the original function with its original arguments.
-	%orig(nil); // Call through to the original function with a custom argument.
-
-	// If you use %orig(), you MUST supply all arguments (except for self and _cmd, the automatically generated ones.)
-}
-
-// Hooking an instance method with no arguments.
-- (id)noArguments {
-	%log;
-	id awesome = %orig;
-	[awesome doSomethingElse];
-
-	return awesome;
-}
-
-// Always make sure you clean up after yourself; Not doing so could have grave consequences!
 %end
-*/

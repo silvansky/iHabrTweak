@@ -1,0 +1,7 @@
+#!/usr/sh
+
+export ARCHS=armv7
+export TARGET=iphone:latest:4.3
+export THEOS="`pwd`/theos"
+export SDKVERSION=6.0
+export THEOS_DEVICE_IP=192.168.2.2
