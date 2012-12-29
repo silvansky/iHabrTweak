@@ -1,0 +1,9 @@
+Package: com.silvansky.ihabr
+Name: iHabrTweak
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: iHabr tweak: shows user karma and rating on lock screen.
+Maintainer: silvansky
+Author: silvansky
+Section: Tweaks
